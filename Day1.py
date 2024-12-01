@@ -1,8 +1,25 @@
-import math
+#Challenge 1
 list1 = []
 list2 = []
 sum = 0
-with open(r"C:\Users\Shawf\OneDrive\Desktop\text.txt", "r") as reader:
+with open(r"<path>", "r") as reader:
+    temp = reader.readlines()
+    for i in range(len(temp)):
+        str = temp[i].split(" ")
+        list1.append(int(str[0]))
+        list2.append(int(str[3]))
+list1 = sorted(list1)
+list2 = sorted(list2)
+
+for i in range(len(list1)):
+    sum += Math.abs(list1[i] - list2[i])
+print(sum)
+
+#Challenge 2
+list1 = []
+list2 = []
+sum = 0
+with open(r"<path>", "r") as reader:
     temp = reader.readlines()
     for i in range(len(temp)):
         str = temp[i].split(" ")
