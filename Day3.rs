@@ -59,3 +59,50 @@ fn main() {
 }
 
 //Problem 2
+use std::fs::File;
+use std::io::{self, Read};
+use std::path::Path;
+
+fn read_to_string<P>(filename: P) -> io::Result<String>
+where
+    P: AsRef<Path>,
+{
+    let mut file = File::open(filename)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+    Ok(contents)
+}
+
+
+
+fn process_memory(input: &str) -> i32 {
+    let mut enabled = true; // At the beginning, mul instructions are enabled.
+    let mut sum = 0;
+
+    // Use regex to capture the "mul" and control instructions.
+    let regex = regex::Regex::new(r"(mul\((\d+),(\d+)\)|do\(\)|don't\(\))").unwrap();
+
+    for cap in regex.captures_iter(input) {
+        if let Some(instruction) = cap.get(1) {
+            match instruction.as_str() {
+                "do()" => enabled = true,
+                "don't()" => enabled = false,
+                _ if instruction.as_str().starts_with("mul(") => {
+                    if enabled {
+                        let x: i32 = cap[2].parse().unwrap();
+                        let y: i32 = cap[3].parse().unwrap();
+                        sum += x * y;
+                    }
+                }
+                _ => (),
+            }
+        }
+    }
+
+    sum
+}
+
+fn main() {
+    let contents = read_to_string(r"H:\Rust\Practise\src\text.txt").unwrap();
+    println!("Total: {}", process_memory(contents.as_str()));
+}
