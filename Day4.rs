@@ -76,26 +76,37 @@ where
     let reader = io::BufReader::new(file);
     reader.lines().collect()
 }
-
-fn diag_check(arr: &Vec<String>) -> u32 {
+fn count_occurrences(grid: &Vec<String>) -> u32 {
+    let rows = grid.len();
+    let cols = grid[0].len();
     let mut count = 0;
-    let length = arr.len();
-    let width = arr[0].len();
 
-    for i in 1..length - 1 {
-        for j in 1..width - 1 {
-            if arr[i].chars().nth(j).unwrap() == 'A' {
-                let left_up = arr[i + 1].chars().nth(j - 1).unwrap();
-                let right_down = arr[i - 1].chars().nth(j + 1).unwrap();
-                let right_up = arr[i + 1].chars().nth(j + 1).unwrap();
-                let left_down = arr[i - 1].chars().nth(j - 1).unwrap();
-
-                if (left_up == 'M' && right_down == 'S') || (left_up == 'S' && right_down == 'M') {
-                    if (right_up == 'M' && left_down == 'S') || (right_up == 'S' && left_down == 'M') {
-                        count += 1;
-                    }
+    for i in 1..rows-1{
+        for j in 1..cols-1{
+            if grid[i].chars().nth(j).unwrap() != 'A'{
+                continue;
+            }
+            if grid[i-1].chars().nth(j-1).unwrap() == 'M'  && grid[i+1].chars().nth(j+1).unwrap() == 'S'{
+                if grid[i+1].chars().nth(j-1).unwrap() == 'M' && grid[i-1].chars().nth(j+1).unwrap() == 'S'{
+                    count += 1;
+                    continue;
+                }
+                else if grid[i+1].chars().nth(j-1).unwrap() == 'S' && grid[i-1].chars().nth(j+1).unwrap() == 'M'{
+                    count += 1;
+                    continue;
                 }
             }
+            else if grid[i-1].chars().nth(j-1).unwrap() == 'S'  && grid[i+1].chars().nth(j+1).unwrap() == 'M'{
+                if grid[i+1].chars().nth(j-1).unwrap() == 'S' && grid[i-1].chars().nth(j+1).unwrap() == 'M'{
+                    count += 1;
+                    continue;
+                }
+                else if grid[i+1].chars().nth(j-1).unwrap() == 'M' && grid[i-1].chars().nth(j+1).unwrap() == 'S'{
+                    count += 1;
+                    continue;
+                }
+            }
+
         }
     }
 
@@ -107,6 +118,11 @@ fn main() {
     let length: u32 = str.chars().count() as u32;
     println!("{}", length);
     let contents = read_to_string(r"H:\Rust\Practise\src\text.txt").unwrap();
-    println!("{:?}", diag_check(&contents));
+
+    for i in &contents {
+        println!("{:#?}", i);
+    }
+    println!("{:?}", count_occurrences(&contents));
 }
+
 
